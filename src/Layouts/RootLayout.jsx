@@ -1,44 +1,126 @@
-import { Outlet, NavLink, Link } from "react-router-dom"
-import { Button } from "../components/ui/button"
-import { Ticket } from "lucide-react"
+import { useState } from 'react'
+import { Outlet, NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Search } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../lib/api'
+import Starfield from '../components/Starfield'
+
+function LogoMark() {
+  return (
+    <span className="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 1 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 1 0 0-4V8Z"
+          stroke="#050a24"
+          strokeWidth="1.6"
+          strokeLinejoin="round"
+        />
+        <path d="M10 7v10" stroke="#050a24" strokeWidth="1.6" strokeDasharray="2 2" />
+      </svg>
+    </span>
+  )
+}
 
 export default function RootLayout() {
-  const navLinkClass = ({ isActive }) =>
-    `text-sm font-medium transition-colors ${
-      isActive ? "text-slate-900 font-semibold" : "text-slate-500 hover:text-slate-900"
-    }`
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [searchInput, setSearchInput] = useState(searchParams.get('q') || '')
+
+  function handleSearchKeyDown(e) {
+    if (e.key === 'Enter') {
+      const q = searchInput.trim()
+      navigate(q ? `/?q=${encodeURIComponent(q)}` : '/')
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Navbar Konsisten */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-            <Ticket className="h-6 w-6 text-slate-900" />
-            <span>Tixoria</span>
-          </Link>
-          
-          <nav className="flex items-center gap-6">
-            <NavLink to="/" className={navLinkClass}>Beranda</NavLink>
-            <NavLink to="/events" className={navLinkClass}>Daftar Event</NavLink>
-          </nav>
+    <div>
+      <Starfield />
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm">Masuk</Button>
-            <Button size="sm">Daftar</Button>
+      <header>
+        <div className="wrap header-inner">
+          <Link to="/" className="logo">
+            <LogoMark />
+            TIXORA
+          </Link>
+          <nav className="main-nav">
+            <NavLink to="/">Beranda</NavLink>
+            <NavLink to="/events">Explore</NavLink>
+            <a href="/#kategori">Biaya</a>
+            <a href="/#trending">Tiket gelang</a>
+          </nav>
+          <div className="header-actions">
+            <div className="search-pill">
+              <Search />
+              <input
+                type="text"
+                placeholder="Cari event, artis, kota..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+              />
+            </div>
+            <button className="btn btn-ghost" onClick={() => navigate('/login')}>
+              Masuk
+            </button>
+            <button className="btn btn-solid" onClick={() => navigate('/register')}>
+              Daftar
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Konten Halaman */}
-      <main className="flex-1">
-        <Outlet />
-      </main>
+      <Outlet />
 
-      {/* Footer Konsisten */}
-      <footer className="border-t bg-white py-6 text-center text-sm text-slate-500">
-        <p>© 2026 Tixoria PBL Team. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
     </div>
+  )
+}
+
+function SiteFooter() {
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: api.getCategories,
+  })
+
+  return (
+    <footer>
+      <div className="wrap">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <div className="logo">
+              <LogoMark />
+              TIXORA
+            </div>
+            <p>Ruang temu untuk setiap konser, seminar, workshop, dan pengalaman yang layak diingat.</p>
+          </div>
+          <div className="footer-col">
+            <h4>Jelajahi</h4>
+            {categories.map((c) => (
+              <Link key={c.id} to={`/?category=${c.slug}#kategori`}>
+                {c.nama}
+              </Link>
+            ))}
+          </div>
+          <div className="footer-col">
+            <h4>Perusahaan</h4>
+            <a href="#">Tentang TIXORA</a>
+            <a href="#">Jadi Penyelenggara</a>
+            <a href="#">Karier</a>
+            <a href="#">Bantuan</a>
+          </div>
+          <div className="footer-col">
+            <h4>Ikuti kami</h4>
+            <a href="#">Instagram</a>
+            <a href="#">TikTok</a>
+            <a href="#">X (Twitter)</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 TIXORA. Semua hak dilindungi.</span>
+          <span>Dibuat untuk generasi yang suka pengalaman baru.</span>
+        </div>
+      </div>
+    </footer>
   )
 }
