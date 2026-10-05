@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Outlet, NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Search } from 'lucide-react'
+import { Search, LogOut } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 import Starfield from '../components/Starfield'
 
 function LogoMark() {
@@ -25,6 +26,12 @@ export default function RootLayout() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [searchInput, setSearchInput] = useState(searchParams.get('q') || '')
+  const { user, isAuthenticated, logout } = useAuth()
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
 
   function handleSearchKeyDown(e) {
     if (e.key === 'Enter') {
@@ -44,10 +51,18 @@ export default function RootLayout() {
             TIXORA
           </Link>
           <nav className="main-nav">
-            <NavLink to="/">Beranda</NavLink>
-            <NavLink to="/events">Explore</NavLink>
-            <a href="/#kategori">Biaya</a>
-            <a href="/#trending">Tiket gelang</a>
+            <NavLink to="/" end className={({ isActive }) => (isActive ? 'current' : '')}>
+              Beranda
+            </NavLink>
+            <NavLink to="/events" className={({ isActive }) => (isActive ? 'current' : '')}>
+              Explore
+            </NavLink>
+            <NavLink to="/biaya" className={({ isActive }) => (isActive ? 'current' : '')}>
+              Biaya
+            </NavLink>
+            <NavLink to="/tiket-gelang" className={({ isActive }) => (isActive ? 'current' : '')}>
+              Tiket gelang
+            </NavLink>
           </nav>
           <div className="header-actions">
             <div className="search-pill">
@@ -60,12 +75,30 @@ export default function RootLayout() {
                 onKeyDown={handleSearchKeyDown}
               />
             </div>
-            <button className="btn btn-ghost" onClick={() => navigate('/login')}>
-              Masuk
-            </button>
-            <button className="btn btn-solid" onClick={() => navigate('/register')}>
-              Daftar
-            </button>
+            {isAuthenticated ? (
+              <>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--white-dim)' }}>
+                  Hai, {user.nama.split(' ')[0]}
+                </span>
+                <button
+                  className="btn btn-ghost"
+                  onClick={handleLogout}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                >
+                  <LogOut size={16} />
+                  Keluar
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn btn-ghost" onClick={() => navigate('/login')}>
+                  Masuk
+                </button>
+                <button className="btn btn-solid" onClick={() => navigate('/register')}>
+                  Daftar
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>

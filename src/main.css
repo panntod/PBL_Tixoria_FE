@@ -528,3 +528,508 @@
   @media (max-width:900px){
     .wrap{padding:0 22px;}
   }
+
+/* =======================================================
+   TIXORA — Halaman Login & Register
+   (variabel warna/font dipakai ulang dari tema Beranda di atas)
+   ======================================================= */
+
+.auth-page{
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+}
+
+.site-logo{
+  position:fixed; top:28px; left:36px; z-index:10;
+  font-family:var(--font-display); font-weight:700; font-size:22px;
+  display:flex; align-items:center; gap:10px;
+}
+.back-home{
+  position:fixed; top:32px; right:36px; z-index:10;
+  font-size:14px; font-weight:600; color:var(--white-dim);
+  display:flex; align-items:center; gap:6px;
+}
+.back-home:hover{color:var(--white);}
+.back-home svg{width:15px; height:15px;}
+
+.auth-shell{
+  position:relative; z-index:2;
+  width:100%; max-width:980px;
+  display:grid; grid-template-columns:1fr 1fr;
+  background:var(--glass-strong);
+  border:1px solid var(--glass-border);
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:0 40px 90px rgba(2,4,20,0.55);
+  backdrop-filter:blur(20px);
+}
+
+.brand-panel{
+  position:relative;
+  padding:52px 44px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(143,227,255,0.25), transparent 55%),
+    linear-gradient(160deg, #16226e 0%, #2b3f9e 55%, #4a63d6 100%);
+  display:flex; flex-direction:column; justify-content:space-between;
+  overflow:hidden;
+}
+.brand-panel h2{
+  font-family:var(--font-display); font-weight:600;
+  font-size:28px; line-height:1.3; margin-top:26px;
+}
+.brand-panel h2 .grad{
+  background:linear-gradient(120deg, var(--cyan), #c3a9ff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.brand-panel p{
+  margin-top:14px; font-size:14.5px; color:rgba(246,248,255,0.8); line-height:1.6; max-width:320px;
+}
+.feature-list{margin-top:32px; display:flex; flex-direction:column; gap:14px;}
+.feature-item{display:flex; align-items:center; gap:12px; font-size:13.5px; color:rgba(246,248,255,0.85);}
+.feature-item .ico{
+  width:30px; height:30px; border-radius:9px; flex-shrink:0;
+  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25);
+  display:flex; align-items:center; justify-content:center;
+}
+.feature-item svg{width:15px; height:15px;}
+
+.ticket-mini{
+  position:absolute; right:-30px; bottom:-20px; width:210px; opacity:0.9;
+  filter:drop-shadow(0 20px 30px rgba(5,10,30,0.5));
+}
+.orbit-dot{position:absolute; border-radius:50%;}
+
+@media (prefers-reduced-motion: no-preference){
+  .orb-float{animation:orbFloat 7s ease-in-out infinite;}
+  @keyframes orbFloat{0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);}}
+}
+
+.form-panel{
+  padding:52px 46px;
+  background:rgba(6,10,32,0.35);
+  display:flex; flex-direction:column;
+}
+
+.tab-row{
+  display:flex; gap:6px; background:var(--glass); border:1px solid var(--glass-border);
+  border-radius:100px; padding:5px; margin-bottom:32px;
+}
+.tab-btn{
+  flex:1; text-align:center; padding:10px 0; border-radius:100px;
+  font-size:14px; font-weight:600; color:var(--white-faint);
+  background:transparent; transition:all .2s ease;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg, var(--cyan), var(--electric));
+  color:#050a24;
+  box-shadow:0 8px 20px rgba(91,127,255,0.35);
+}
+
+.form-title{font-family:var(--font-display); font-size:24px; font-weight:600; margin-bottom:8px;}
+.form-sub{font-size:13.5px; color:var(--white-faint); margin-bottom:30px;}
+
+.field{margin-bottom:18px;}
+.field label{
+  display:block; font-size:12.5px; font-weight:600; color:var(--white-dim);
+  margin-bottom:8px; letter-spacing:0.01em;
+}
+.input-wrap{
+  display:flex; align-items:center; gap:10px;
+  background:var(--glass); border:1px solid var(--glass-border);
+  border-radius:14px; padding:13px 16px;
+  transition:border-color .2s ease;
+}
+.input-wrap:focus-within{border-color:rgba(143,227,255,0.55);}
+.input-wrap svg{width:17px; height:17px; opacity:0.55; flex-shrink:0;}
+.input-wrap input{
+  background:transparent; border:none; outline:none; color:var(--white);
+  font-family:inherit; font-size:14.5px; width:100%;
+}
+.input-wrap input::placeholder{color:var(--white-faint);}
+.toggle-eye{opacity:0.55; cursor:pointer; flex-shrink:0;}
+.toggle-eye:hover{opacity:0.9;}
+
+.row-between{display:flex; align-items:center; justify-content:space-between; margin:4px 0 22px;}
+.remember{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--white-faint);}
+.remember input{accent-color:var(--electric); width:15px; height:15px;}
+.forgot-link{font-size:13px; font-weight:600; color:var(--cyan);}
+.forgot-link:hover{text-decoration:underline;}
+
+.btn-submit{
+  width:100%; padding:15px 0; border-radius:100px;
+  background:linear-gradient(135deg, var(--cyan), var(--electric));
+  color:#050a24; font-weight:700; font-size:15px;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.btn-submit:disabled{opacity:0.6; cursor:not-allowed; transform:none;}
+.btn-submit:hover{transform:translateY(-2px); box-shadow:0 14px 34px rgba(91,127,255,0.45);}
+
+.divider{
+  display:flex; align-items:center; gap:14px; margin:26px 0;
+  font-size:12px; color:var(--white-faint); text-transform:uppercase; letter-spacing:0.05em;
+}
+.divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--glass-border);}
+
+.social-row{display:flex; gap:12px;}
+.btn-social{
+  flex:1; display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:12px 0; border-radius:14px;
+  background:var(--glass); border:1px solid var(--glass-border);
+  font-size:13.5px; font-weight:600; color:var(--white);
+  transition:background .2s ease;
+}
+.btn-social:hover{background:rgba(255,255,255,0.1);}
+.btn-social svg{width:18px; height:18px;}
+
+.switch-line{
+  text-align:center; margin-top:28px; font-size:13.5px; color:var(--white-faint);
+}
+.switch-line button{
+  background:none; color:var(--cyan); font-weight:700; font-size:13.5px;
+}
+.switch-line button:hover{text-decoration:underline;}
+
+.terms-note{
+  font-size:12px; color:var(--white-faint); line-height:1.6; margin-top:4px;
+}
+.terms-note a{color:var(--cyan); font-weight:600;}
+
+/* Tambahan di luar desain asli: kotak pesan error validasi/login gagal */
+.auth-error{
+  background:rgba(255,90,90,0.12); border:1px solid rgba(255,90,90,0.4);
+  color:#ffb3b3; font-size:13px; padding:10px 14px; border-radius:12px; margin-bottom:18px;
+}
+
+@media (max-width:860px){
+  .auth-shell{grid-template-columns:1fr; max-width:440px;}
+  .brand-panel{display:none;}
+  .site-logo{position:absolute;}
+  .back-home{position:absolute;}
+}
+@media (max-width:480px){
+  .form-panel{padding:40px 26px;}
+}
+
+/* =======================================================
+   TIXORA — Halaman Explore
+   (event-card, event-grid, thumb-*, dll dipakai ulang dari tema Beranda)
+   ======================================================= */
+
+nav.main-nav a.current{color:var(--white);}
+
+.page-head{padding:44px 0 8px;}
+.page-head h1{
+  font-family:var(--font-display); font-weight:600;
+  font-size:22px; letter-spacing:-0.01em;
+}
+.page-head p{font-size:13.5px; color:var(--white-faint); margin-top:6px;}
+
+.filter-bar{padding:18px 0 8px;}
+.filter-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 22px; border-radius:100px;
+  background:var(--glass); border:1px solid var(--glass-border);
+  font-size:14px; font-weight:600; color:var(--white);
+  transition:all .2s ease;
+}
+.filter-btn:hover{border-color:rgba(143,227,255,0.4);}
+.filter-btn svg{width:17px; height:17px;}
+.filter-btn .chev{width:14px; height:14px; transition:transform .2s ease;}
+.filter-btn.open .chev{transform:rotate(180deg);}
+.filter-count{
+  background:linear-gradient(135deg, var(--cyan), var(--electric)); color:#050a24;
+  font-size:11px; font-weight:800; border-radius:100px; padding:2px 8px;
+}
+
+.filter-panel{
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .32s ease, opacity .28s ease, margin .32s ease;
+  margin-top:0;
+}
+.filter-panel.open{
+  max-height:600px; opacity:1; margin-top:18px;
+}
+.filter-panel-inner{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-md); padding:26px 28px;
+}
+.filter-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:22px;}
+@media (max-width:700px){.filter-grid{grid-template-columns:1fr;}}
+.filter-field label{
+  display:block; font-size:12.5px; font-weight:700; color:var(--white-dim);
+  margin-bottom:10px; letter-spacing:0.02em; text-transform:uppercase;
+}
+.input-wrap select{
+  background:transparent; border:none; outline:none; color:var(--white);
+  font-family:inherit; font-size:14px; width:100%; cursor:pointer;
+}
+.input-wrap select option{background:#0a1240; color:var(--white);}
+.input-wrap input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1); opacity:0.6; cursor:pointer;}
+
+.cat-field label{margin-bottom:12px;}
+.cat-pill-row{display:flex; flex-wrap:wrap; gap:10px;}
+.cat-pill{
+  padding:10px 18px; border-radius:100px;
+  background:var(--glass); border:1px solid var(--glass-border);
+  font-size:13.5px; font-weight:600; color:var(--white-dim);
+  transition:all .2s ease;
+}
+.cat-pill.active{
+  background:linear-gradient(135deg, var(--cyan), var(--electric));
+  color:#050a24; border-color:transparent;
+  box-shadow:0 8px 20px rgba(91,127,255,0.35);
+}
+.cat-pill:not(.active):hover{border-color:rgba(143,227,255,0.4); color:var(--white);}
+
+.filter-actions{
+  display:flex; justify-content:flex-end; gap:12px;
+  padding-top:20px; border-top:1px solid var(--glass-border);
+}
+.filter-actions .btn{padding:11px 24px; font-size:13.5px;}
+
+.results-bar{
+  display:flex; align-items:center; justify-content:space-between;
+  margin:34px 0 22px; flex-wrap:wrap; gap:10px;
+}
+.results-count{font-size:13.5px; color:var(--white-faint);}
+.results-count b{color:var(--white);}
+
+.empty-state{
+  display:none; text-align:center; padding:70px 20px; color:var(--white-faint);
+}
+.empty-state.show{display:block;}
+.empty-state svg{width:44px; height:44px; margin:0 auto 16px; opacity:0.5;}
+.empty-state h3{font-family:var(--font-display); font-size:17px; color:var(--white); margin-bottom:8px; font-weight:600;}
+
+/* =======================================================
+   TIXORA — Halaman Biaya (simulator biaya tiket)
+   ======================================================= */
+
+/* Frame 1: hero simulator banner */
+.hero-frame{
+  position:relative; overflow:hidden;
+  border-radius:var(--radius-lg);
+  background:
+    radial-gradient(circle at 85% 20%, rgba(143,227,255,0.28), transparent 55%),
+    linear-gradient(115deg, #131d5e 0%, #24359b 45%, #4a63d6 85%, #6f8dff 100%);
+  border:1px solid var(--glass-border);
+  padding:48px 52px;
+  display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:center;
+  min-height:280px;
+}
+.hero-frame h2{font-family:var(--font-display); font-size:clamp(24px,3vw,34px); font-weight:600; line-height:1.25; max-width:440px;}
+.hero-frame p{font-size:14px; color:rgba(246,248,255,0.82); margin-top:14px; max-width:420px; line-height:1.6;}
+.hero-frame .btn-solid{margin-top:26px; padding:14px 28px; font-size:14.5px;}
+
+.example-card{
+  background:rgba(6,10,32,0.5); border:1px solid rgba(255,255,255,0.18);
+  border-radius:var(--radius-md); padding:24px 26px; backdrop-filter:blur(10px);
+}
+.example-card .ex-label{font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--cyan); font-weight:700; margin-bottom:14px;}
+.ex-row{display:flex; justify-content:space-between; font-size:13.5px; color:rgba(246,248,255,0.85); padding:8px 0;}
+.ex-row + .ex-row{border-top:1px dashed rgba(255,255,255,0.12);}
+.ex-row.total{margin-top:6px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.25); font-weight:700; font-size:15px; color:var(--white);}
+.ex-row.total span:last-child{color:var(--cyan); font-family:var(--font-display); font-size:16px;}
+
+/* Frame 2+3: split simulator */
+.sim-section{padding:54px 0 0;}
+.sim-title{font-family:var(--font-display); font-size:19px; font-weight:600; margin-bottom:20px;}
+.sim-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+@media (max-width:860px){.sim-grid{grid-template-columns:1fr;}}
+
+.sim-card{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-md); padding:28px 30px;
+}
+.sim-card h3{font-family:var(--font-display); font-size:16px; font-weight:600; margin-bottom:22px;}
+
+.field .hint{font-size:11.5px; color:var(--white-faint); font-weight:400; margin-left:6px;}
+.input-wrap .prefix{font-size:14px; color:var(--white-faint); font-weight:600;}
+.input-wrap input[type=number]::-webkit-inner-spin-button{opacity:0.6;}
+
+/* result card */
+.result-row{display:flex; justify-content:space-between; align-items:center; padding:11px 0; font-size:13.5px; color:var(--white-dim);}
+.result-row + .result-row{border-top:1px dashed var(--glass-border);}
+.result-row b{color:var(--white); font-weight:600;}
+.result-row.total{margin-top:8px; padding-top:18px; border-top:1px solid var(--glass-border);}
+.result-row.total .rlabel{font-size:14.5px; font-weight:700; color:var(--white);}
+.result-row.total .rvalue{font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--cyan);}
+.result-sub{font-size:11.5px; color:var(--white-faint); margin-top:4px;}
+
+/* Frame 4: balance card */
+.balance-card{
+  margin-top:22px;
+  background:linear-gradient(120deg, rgba(46,166,110,0.16), rgba(46,166,110,0.04));
+  border:1px solid rgba(62,166,110,0.4);
+  border-radius:var(--radius-md); padding:26px 30px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+}
+.balance-left{display:flex; align-items:center; gap:16px;}
+.balance-icon{
+  width:48px; height:48px; border-radius:14px; flex-shrink:0;
+  background:rgba(62,166,110,0.25); border:1px solid rgba(62,166,110,0.5);
+  display:flex; align-items:center; justify-content:center;
+}
+.balance-icon svg{width:22px; height:22px; color:#3EA66E; stroke:#5FD394;}
+.balance-label{font-size:12.5px; color:var(--white-faint); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;}
+.balance-note{font-size:12px; color:var(--white-faint); margin-top:3px; max-width:360px;}
+.balance-value{font-family:var(--font-display); font-size:30px; font-weight:700; color:#5FD394;}
+
+/* Payment methods */
+.pay-section{padding:56px 0 70px;}
+.pay-group{margin-bottom:30px;}
+.pay-group-title{font-size:13px; font-weight:700; color:var(--white-dim); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px;}
+.pay-row{display:flex; flex-wrap:wrap; gap:14px;}
+.pay-chip{
+  display:flex; align-items:center; gap:12px;
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:16px; padding:14px 20px; min-width:160px;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.pay-chip:hover{border-color:rgba(143,227,255,0.4); transform:translateY(-3px);}
+.pay-badge{
+  width:38px; height:38px; border-radius:10px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:700; font-size:12px; color:#050a24;
+}
+.pay-name{font-size:13.5px; font-weight:600;}
+
+.badge-bca{background:linear-gradient(135deg,#5b7fff,#8fe3ff);}
+.badge-mandiri{background:linear-gradient(135deg,#ffd166,#ff9f43);}
+.badge-bni{background:linear-gradient(135deg,#ff8a65,#ff6ec7);}
+.badge-bri{background:linear-gradient(135deg,#5fd394,#8fe3ff);}
+.badge-gopay{background:linear-gradient(135deg,#8fe3ff,#5b7fff);}
+.badge-ovo{background:linear-gradient(135deg,#c3a9ff,#7a3bff);}
+.badge-dana{background:linear-gradient(135deg,#5fd394,#2ca6ae);}
+.badge-shopeepay{background:linear-gradient(135deg,#ff9de8,#ff6ec7);}
+.badge-qris{background:linear-gradient(135deg,#eaf0ff,#aebbe8); color:#0a1030;}
+
+.qris-note{font-size:12px; color:var(--white-faint); margin-top:10px; max-width:480px; line-height:1.6;}
+
+@media (max-width:900px){ .hero-frame{grid-template-columns:1fr; padding:34px 26px;} }
+
+/* =======================================================
+   TIXORA — Halaman Tiket Gelang (konfigurator gelang tiket)
+   ======================================================= */
+
+.top-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:26px; align-items:stretch;}
+@media (max-width:900px){.top-grid{grid-template-columns:1fr;}}
+
+.preview-card{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg); display:flex; align-items:center; justify-content:center;
+  padding:40px 30px; min-height:340px;
+}
+
+/* wristband illustration */
+.band-outer{width:100%; max-width:460px;}
+.band{
+  position:relative; width:100%; height:76px;
+  border-radius:10px;
+  display:flex; align-items:center;
+  box-shadow:0 14px 30px rgba(2,4,20,0.45);
+  transition:background .25s ease;
+}
+.band.paper{
+  background:
+    radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1.2px) 0 0/10px 10px,
+    #F3EFE4;
+  border:1px solid #DCD5C2;
+}
+.band.fabric{
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.10) 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.06) 0 3px, transparent 3px 6px),
+    #4B5FA8;
+  border:1px solid #3B4B8C;
+}
+.band-cut{
+  position:absolute; left:78%; top:6px; bottom:6px; width:0;
+  border-left:2px dashed rgba(0,0,0,0.28);
+}
+.band.fabric .band-cut{border-left:2px dashed rgba(255,255,255,0.35);}
+.band-clasp{
+  position:absolute; right:-14px; top:50%; transform:translateY(-50%);
+  width:30px; height:40px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+}
+.band.paper .band-clasp{background:#E3DCC8; border:1px solid #CFC6AC;}
+.band.fabric .band-clasp{background:#3B4B8C; border:1px solid #2E3C73;}
+.band-clasp .hole{width:9px; height:9px; border-radius:50%; background:rgba(0,0,0,0.25);}
+.band.fabric .band-clasp .hole{background:rgba(255,255,255,0.3);}
+
+.band-text{
+  flex:1; text-align:center; font-family:var(--font-display); font-weight:700;
+  font-size:17px; letter-spacing:0.14em; padding-left:18px;
+}
+.band.paper .band-text{color:#2B2A24;}
+.band.fabric .band-text{color:#F2F4FF;}
+
+.band-qr{
+  position:absolute; left:16px; top:50%; transform:translateY(-50%);
+  width:44px; height:44px; border-radius:4px;
+  background:#fff; padding:4px; display:none;
+}
+.band-qr.show{display:block;}
+.band-qr svg{width:100%; height:100%;}
+
+.band-caption{margin-top:22px; text-align:center; font-size:12.5px; color:var(--white-faint);}
+.band-caption b{color:var(--white);}
+
+/* order frame */
+.order-card{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg); padding:30px 32px;
+  display:flex; flex-direction:column; gap:22px;
+}
+.price-line{display:flex; align-items:baseline; justify-content:space-between;}
+.price-line .label{font-size:12.5px; font-weight:700; color:var(--white-dim); text-transform:uppercase; letter-spacing:0.04em;}
+.price-line .value{font-family:var(--font-display); font-size:24px; font-weight:600; color:var(--cyan);}
+.price-line .value span{font-size:12px; color:var(--white-faint); font-family:var(--font-body); font-weight:500;}
+
+.option-field label{display:block; font-size:12.5px; font-weight:700; color:var(--white-dim); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.04em;}
+.option-row{display:flex; gap:10px;}
+.option-btn{
+  flex:1; padding:13px 0; text-align:center; border-radius:14px;
+  background:var(--glass); border:1px solid var(--glass-border);
+  font-size:14px; font-weight:600; color:var(--white-dim);
+  transition:all .2s ease;
+}
+.option-btn.active{
+  background:linear-gradient(135deg, var(--cyan), var(--electric)); color:#050a24;
+  border-color:transparent; box-shadow:0 8px 20px rgba(91,127,255,0.35);
+}
+.option-btn:not(.active):hover{border-color:rgba(143,227,255,0.4); color:var(--white);}
+
+/* description */
+.spec-section{margin-top:30px;}
+.spec-card{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-md); padding:26px 30px;
+}
+.spec-list{display:grid; grid-template-columns:1fr 1fr; gap:12px 28px;}
+@media (max-width:700px){.spec-list{grid-template-columns:1fr;}}
+.spec-item{display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:var(--white-dim);}
+.spec-item svg{width:16px; height:16px; flex-shrink:0; margin-top:2px; color:var(--cyan); stroke:var(--cyan);}
+
+/* quantity + total */
+.order-section{margin-top:26px; padding-bottom:70px;}
+.order-bottom{
+  background:var(--glass-strong); border:1px solid var(--glass-border);
+  border-radius:var(--radius-md); padding:28px 30px;
+  display:grid; grid-template-columns:1fr auto; gap:24px; align-items:end;
+}
+@media (max-width:640px){.order-bottom{grid-template-columns:1fr;}}
+.qty-field label{display:block; font-size:12.5px; font-weight:700; color:var(--white-dim); margin-bottom:10px;}
+.qty-field .input-wrap{max-width:260px;}
+.qty-field .input-wrap span{font-size:13px; color:var(--white-faint);}
+
+.total-box{text-align:right;}
+.total-box .t-label{font-size:12.5px; color:var(--white-faint); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;}
+.total-box .t-value{font-family:var(--font-display); font-size:28px; font-weight:700; color:var(--cyan); margin-top:4px;}
+@media (max-width:640px){.total-box{text-align:left;}}

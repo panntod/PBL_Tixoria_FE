@@ -1,74 +1,189 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { Calendar, MapPin } from "lucide-react";
+  SlidersHorizontal,
+  ChevronDown,
+  Calendar,
+  MapPin,
+  Search,
+} from "lucide-react";
+import { api } from "../lib/api";
+import EventCard from "../components/EventCard";
 
-const MOCK_EVENTS = [
-  {
-    id: "1",
-    title: "Festival Musik Kampus 2026",
-    date: "24 Okt 2026",
-    location: "Stadion Utama",
-    price: "Rp 50.000",
-  },
-  {
-    id: "2",
-    title: "Seminar Nasional AI & Web",
-    date: "12 Nov 2026",
-    location: "Auditorium Gd. A",
-    price: "Gratis",
-  },
-  {
-    id: "3",
-    title: "Pameran Karya Akhir Desain",
-    date: "05 Des 2026",
-    location: "Galeri Seni",
-    price: "Rp 15.000",
-  },
-];
+export default function EventPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filterOpen, setFilterOpen] = useState(false);
 
-export default function EventsPage() {
+  const activeCategory = searchParams.get("category") || "semua";
+  const activeLocation = searchParams.get("location") || "semua";
+  const activeDate = searchParams.get("date") || "";
+
+  function updateFilter(patch) {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(patch).forEach(([key, value]) => {
+        if (!value || value === "semua") next.delete(key);
+        else next.set(key, value);
+      });
+      return next;
+    });
+  }
+
+  function resetFilters() {
+    setSearchParams({});
+  }
+
+  const activeFiltersCount =
+    (activeCategory !== "semua" ? 1 : 0) +
+    (activeLocation !== "semua" ? 1 : 0) +
+    (activeDate ? 1 : 0);
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: api.getCategories,
+  });
+  const { data: locations = [] } = useQuery({
+    queryKey: ["events", "locations"],
+    queryFn: api.getEventLocations,
+  });
+  const {
+    data: events = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["events", "list", activeCategory, activeLocation, activeDate],
+    queryFn: () =>
+      api.getEvents({
+        category: activeCategory,
+        location: activeLocation,
+        date: activeDate,
+      }),
+  });
+
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Daftar Event Tersedia</h1>
-        <p className="text-slate-600">
-          Pilih acara kampus favoritmu dan amankan tiketnya.
+    <main className="wrap">
+      <div className="page-head">
+        <h1>Jelajah Event</h1>
+        <p>
+          Temukan konser, seminar, workshop, dan event lainnya yang cocok
+          buatmu.
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {MOCK_EVENTS.map((event) => (
-          <Card key={event.id} className="flex flex-col justify-between">
-            <CardHeader>
-              <Badge className="w-fit mb-2">{event.price}</Badge>
-              <CardTitle className="text-xl">{event.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm text-slate-600">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" /> {event.date}
+      <div className="filter-bar">
+        <button
+          className={`filter-btn ${filterOpen ? "open" : ""}`}
+          onClick={() => setFilterOpen((v) => !v)}
+        >
+          <SlidersHorizontal />
+          Filter
+          {activeFiltersCount > 0 && (
+            <span className="filter-count">{activeFiltersCount}</span>
+          )}
+          <ChevronDown className="chev" />
+        </button>
+
+        <div className={`filter-panel ${filterOpen ? "open" : ""}`}>
+          <div className="filter-panel-inner">
+            <div className="filter-grid">
+              <div className="filter-field">
+                <label>Tanggal</label>
+                <div className="input-wrap">
+                  <Calendar />
+                  <input
+                    type="date"
+                    value={activeDate}
+                    onChange={(e) => updateFilter({ date: e.target.value })}
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> {event.location}
+              <div className="filter-field">
+                <label>Lokasi</label>
+                <div className="input-wrap">
+                  <MapPin />
+                  <select
+                    value={activeLocation}
+                    onChange={(e) => updateFilter({ location: e.target.value })}
+                  >
+                    <option value="semua">Semua Lokasi</option>
+                    {locations.map((loc) => (
+                      <option key={loc} value={loc}>
+                        {loc}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </CardContent>
-            <CardFooter>
-              <Link to={`/events/${event.id}`}>
-                <Button asChild className="w-full">
-                  Detail Tiket
-                </Button>
-              </Link>
-            </CardFooter>
-          </Card>
-        ))}
+            </div>
+
+            <div className="filter-field cat-field">
+              <label>Kategori</label>
+              <div className="cat-pill-row">
+                <button
+                  className={`cat-pill ${activeCategory === "semua" ? "active" : ""}`}
+                  onClick={() => updateFilter({ category: "semua" })}
+                >
+                  Semua
+                </button>
+                {categories.map((c) => (
+                  <button
+                    key={c.id}
+                    className={`cat-pill ${activeCategory === c.slug ? "active" : ""}`}
+                    onClick={() => updateFilter({ category: c.slug })}
+                  >
+                    {c.nama}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="filter-actions">
+              <button className="btn btn-ghost" onClick={resetFilters}>
+                Reset
+              </button>
+              <button
+                className="btn btn-solid"
+                onClick={() => setFilterOpen(false)}
+              >
+                Terapkan Filter
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div className="results-bar">
+        <div className="results-count">
+          <b>{events.length}</b> event ditemukan
+        </div>
+      </div>
+
+      {isError ? (
+        <p style={{ color: "var(--white-faint)", fontSize: 14 }}>
+          Gagal memuat event. Pastikan backend berjalan.
+        </p>
+      ) : isLoading ? (
+        <p style={{ color: "var(--white-faint)", fontSize: 14 }}>
+          Memuat event...
+        </p>
+      ) : (
+        <>
+          <div className="event-grid">
+            {events.map((ev) => (
+              <EventCard key={ev.id} event={ev} />
+            ))}
+          </div>
+
+          <div className={`empty-state ${events.length === 0 ? "show" : ""}`}>
+            <Search />
+            <h3>Event tidak ditemukan</h3>
+            <p>
+              Coba ubah filter kategori, lokasi, atau tanggal yang kamu pilih.
+            </p>
+          </div>
+        </>
+      )}
+    </main>
   );
 }
