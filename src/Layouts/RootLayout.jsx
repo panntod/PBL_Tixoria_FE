@@ -1,159 +1,120 @@
-import { useState } from 'react'
-import { Outlet, NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Search, LogOut } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '../lib/api'
+import { useEffect } from 'react'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 import { useAuth } from '../context/AuthContext'
-import Starfield from '../components/Starfield'
+import { initials } from '../lib/format'
 
-function LogoMark() {
+function useScrollManager() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (hash) {
+      document.getElementById(hash.slice(1))?.scrollIntoView()
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, hash])
+}
+
+export function SiteFooter() {
   return (
-    <span className="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path
-          d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 1 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 1 0 0-4V8Z"
-          stroke="#050a24"
-          strokeWidth="1.6"
-          strokeLinejoin="round"
-        />
-        <path d="M10 7v10" stroke="#050a24" strokeWidth="1.6" strokeDasharray="2 2" />
-      </svg>
-    </span>
+    <footer className="site-footer">
+      <div className="container">
+        <div>
+          <Logo />
+          <p>Platform acara dan tiket digital.</p>
+        </div>
+        <nav className="footer-links" aria-label="Tautan bawah">
+          <a href="#">Bantuan</a>
+          <a href="#">Syarat &amp; ketentuan</a>
+          <a href="#">Kebijakan privasi</a>
+        </nav>
+      </div>
+    </footer>
   )
 }
 
-export default function RootLayout() {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const [searchInput, setSearchInput] = useState(searchParams.get('q') || '')
+function SiteHeader() {
   const { user, isAuthenticated, logout } = useAuth()
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const isLanding = pathname === '/'
 
   function handleLogout() {
     logout()
     navigate('/')
   }
 
-  function handleSearchKeyDown(e) {
-    if (e.key === 'Enter') {
-      const q = searchInput.trim()
-      navigate(q ? `/?q=${encodeURIComponent(q)}` : '/')
-    }
-  }
+  const navClass = ({ isActive }) => (isActive ? 'active' : '')
 
   return (
-    <div>
-      <Starfield />
-
-      <header>
-        <div className="wrap header-inner">
-          <Link to="/" className="logo">
-            <LogoMark />
-            TIXORA
-          </Link>
-          <nav className="main-nav">
-            <NavLink to="/" end className={({ isActive }) => (isActive ? 'current' : '')}>
-              Beranda
+    <header className="site-header">
+      <div className="container">
+        <Logo />
+        <nav className="main-nav" aria-label="Navigasi utama">
+          <NavLink to="/events" className={navClass}>
+            Jelajahi acara
+          </NavLink>
+          {isAuthenticated ? (
+            <NavLink to="/my-tickets" className={navClass}>
+              Tiket saya
             </NavLink>
-            <NavLink to="/events" className={({ isActive }) => (isActive ? 'current' : '')}>
-              Explore
-            </NavLink>
-            <NavLink to="/biaya" className={({ isActive }) => (isActive ? 'current' : '')}>
-              Biaya
-            </NavLink>
-            <NavLink to="/tiket-gelang" className={({ isActive }) => (isActive ? 'current' : '')}>
-              Tiket gelang
-            </NavLink>
-          </nav>
-          <div className="header-actions">
-            <div className="search-pill">
-              <Search />
-              <input
-                type="text"
-                placeholder="Cari event, artis, kota..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-              />
-            </div>
-            {isAuthenticated ? (
+          ) : (
+            isLanding && (
               <>
-                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--white-dim)' }}>
-                  Hai, {user.nama.split(' ')[0]}
-                </span>
-                <button
-                  className="btn btn-ghost"
-                  onClick={handleLogout}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                >
-                  <LogOut size={16} />
-                  Keluar
-                </button>
+                <Link to="/#cara-kerja">Cara kerja</Link>
+                <Link to="/#penyelenggara">Untuk penyelenggara</Link>
               </>
-            ) : (
-              <>
-                <button className="btn btn-ghost" onClick={() => navigate('/login')}>
-                  Masuk
-                </button>
-                <button className="btn btn-solid" onClick={() => navigate('/register')}>
-                  Daftar
-                </button>
-              </>
-            )}
-          </div>
+            )
+          )}
+        </nav>
+        <div className="header-actions">
+          {isAuthenticated ? (
+            <>
+              <Link to="/account" className="avatar" aria-label="Akun saya" title={user?.nama}>
+                {initials(user?.nama)}
+              </Link>
+              <button type="button" className="link-strong" onClick={handleLogout}>
+                Keluar
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="link-strong">
+                Masuk
+              </Link>
+              <Link to="/register" className="btn btn-primary btn-sm">
+                Daftar
+              </Link>
+            </>
+          )}
         </div>
-      </header>
+      </div>
+    </header>
+  )
+}
 
-      <Outlet />
-
+export default function RootLayout() {
+  useScrollManager()
+  return (
+    <div className="app">
+      <SiteHeader />
+      <main>
+        <Outlet />
+      </main>
       <SiteFooter />
     </div>
   )
 }
 
-function SiteFooter() {
-  const { data: categories = [] } = useQuery({
-    queryKey: ['categories'],
-    queryFn: api.getCategories,
-  })
-
+// Layout tanpa header untuk halaman masuk & daftar (sesuai desain).
+export function AuthLayout() {
+  useScrollManager()
   return (
-    <footer>
-      <div className="wrap">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <div className="logo">
-              <LogoMark />
-              TIXORA
-            </div>
-            <p>Ruang temu untuk setiap konser, seminar, workshop, dan pengalaman yang layak diingat.</p>
-          </div>
-          <div className="footer-col">
-            <h4>Jelajahi</h4>
-            {categories.map((c) => (
-              <Link key={c.id} to={`/?category=${c.slug}#kategori`}>
-                {c.nama}
-              </Link>
-            ))}
-          </div>
-          <div className="footer-col">
-            <h4>Perusahaan</h4>
-            <a href="#">Tentang TIXORA</a>
-            <a href="#">Jadi Penyelenggara</a>
-            <a href="#">Karier</a>
-            <a href="#">Bantuan</a>
-          </div>
-          <div className="footer-col">
-            <h4>Ikuti kami</h4>
-            <a href="#">Instagram</a>
-            <a href="#">TikTok</a>
-            <a href="#">X (Twitter)</a>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 TIXORA. Semua hak dilindungi.</span>
-          <span>Dibuat untuk generasi yang suka pengalaman baru.</span>
-        </div>
-      </div>
-    </footer>
+    <div className="app">
+      <main>
+        <Outlet />
+      </main>
+      <SiteFooter />
+    </div>
   )
 }
