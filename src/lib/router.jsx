@@ -1,21 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout, { AuthLayout } from "../layouts/RootLayout";
 import RequireAuth from "../components/RequireAuth";
-import NotFoundPage from "../pages/NotFoundPage";
-import LandingPage from "../pages/LandingPage";
-import EventDetailPage from "../pages/EventDetailPage";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
-import ForgotPasswordPage from "../pages/ForgotPasswordPage";
-import ConfirmationPage from "../pages/ConfirmationPage";
-import MyTicketsPage from "../pages/MyTicketsPage";
-import AccountLayout from "../pages/AccountLayout";
-import AccountProfilePage from "../pages/AccountProfilePage";
-import AccountNotificationsPage from "../pages/AccountNotificationsPage";
+import NotFoundPage from "../Pages/NotFoundPage";
+import LandingPage from "../Pages/LandingPage";
+import EventDetailPage from "../Pages/EventDetailPage";
+import RegisterPage from "../Pages/RegisterPage";
+import ForgotPasswordPage from "../Pages/ForgotPasswordPage";
+import ConfirmationPage from "../Pages/ConfirmationPage";
+import MyTicketsPage from "../Pages/MyTicketsPage";
+import AccountLayout from "../Pages/AccountLayout";
+import AccountProfilePage from "../Pages/AccountProfilePage";
+import AccountNotificationsPage from "../Pages/AccountNotificationsPage";
 import RegistrationPage from "../Pages/RegistrationPage";
 import ExplorePage from "../Pages/ExplorePage";
 import TicketDetailPage from "../Pages/TicketDetailPage";
 import AccountHistoryPage from "../Pages/AccountHistoryPage";
+import LoginPage from "../Pages/LoginPage";
 
 // Role "user". Rute admin dan owner event ditambahkan setelah desainnya diiris.
 export const router = createBrowserRouter([
