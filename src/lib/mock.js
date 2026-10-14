@@ -1,6 +1,3 @@
-// Data contoh sesuai desain. Dipakai selama backend belum menyediakan
-// endpoint detail event, tiket, dan pendaftaran (lihat services.js).
-
 export const CATEGORIES = [
   { id: 1, slug: 'seminar', nama: 'Seminar' },
   { id: 2, slug: 'workshop', nama: 'Workshop' },

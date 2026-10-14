@@ -45,7 +45,7 @@ export default function TicketDetailPage() {
   const notice = {
     dipakai: "Tiket ini sudah dipindai dan tidak dapat dipakai lagi.",
     dibatalkan: "Acara ini dibatalkan oleh penyelenggara. Tiket tidak berlaku.",
-    menunggu: "Selesaikan pembayaran agar tiket Anda terbit.",
+    menunggu: "Menunggu tiket Anda akan segera terbit.",
   }[reg.status];
 
   return (

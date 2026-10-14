@@ -8,7 +8,7 @@ const EVENT_STATUS = {
 
 const REG_STATUS = {
   sah: ['badge-green', 'Sah'],
-  menunggu: ['badge-orange', 'Menunggu pembayaran'],
+  menunggu: ['badge-orange', 'Menunggu'],
   dipakai: ['badge-neutral', 'Sudah dipakai'],
   dibatalkan: ['badge-red', 'Dibatalkan'],
 }

@@ -1,8 +1,3 @@
-// Lapisan data untuk halaman user.
-//
-// VITE_USE_MOCK (default: true) -> semua data memakai mock.js, aman dipakai demo
-// tanpa backend. Set VITE_USE_MOCK=false untuk memakai backend asli (events,
-// categories). Pendaftaran/tiket belum punya endpoint, jadi tetap disimpan lokal.
 import { api } from './api'
 import { CATEGORIES, EVENTS, SEED_REGISTRATIONS } from './mock'
 
@@ -89,7 +84,6 @@ export function filterEvents(events, { q = '', category = 'semua', when, price, 
     if (needle && !`${e.title} ${e.organizer} ${e.location} ${e.category?.nama}`.toLowerCase().includes(needle)) return false
     if (!matchWhen(e, when)) return false
     if (price === 'gratis' && minPrice(e) !== 0) return false
-    if (price === 'berbayar' && minPrice(e) === 0) return false
     return true
   })
   list = [...list].sort((a, b) => {

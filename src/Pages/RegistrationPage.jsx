@@ -15,12 +15,7 @@ import { useToast } from "../context/ToastContext";
 import { formatDate, isValidEmail } from "../lib/format";
 import { createRegistration, getEvent } from "../lib/services";
 
-const STEPS = ["Pilih tiket", "Data peserta", "Pembayaran", "Selesai"];
-const PAY_METHODS = [
-  ["va", "Transfer virtual account", "BCA, BNI, Mandiri, BRI"],
-  ["qris", "QRIS", "Semua aplikasi dompet digital dan m-banking"],
-  ["ewallet", "Dompet digital", "GoPay, OVO, DANA, ShopeePay"],
-];
+const STEPS = ["Pilih tiket", "Data peserta", "Selesai"];
 
 function Stepper({ current }) {
   return (
@@ -60,7 +55,6 @@ export default function RegistrationPage() {
     refetch,
   } = useQuery({ queryKey: ["event", id], queryFn: () => getEvent(id) });
 
-  const [step, setStep] = useState("data"); // 'data' | 'bayar'
   const [form, setForm] = useState({
     nama: user?.nama || "",
     email: user?.email || "",
@@ -69,7 +63,6 @@ export default function RegistrationPage() {
   });
   const [touched, setTouched] = useState({});
   const [agree, setAgree] = useState(false);
-  const [method, setMethod] = useState("va");
   const [saving, setSaving] = useState(false);
 
   if (isLoading) {
@@ -133,8 +126,7 @@ export default function RegistrationPage() {
     finish();
   }
 
-  const currentIndex = step === "data" ? 1 : 2;
-
+  const currentIndex = 1;
   return (
     <div className="page">
       <div className="container">
@@ -143,143 +135,95 @@ export default function RegistrationPage() {
 
         <div className="wizard-grid">
           <div>
-            {step === "data" ? (
-              <form onSubmit={submitData} noValidate>
-                <div className="card card-pad">
-                  <h2>Data peserta</h2>
-                  <div className="form-grid" style={{ marginTop: 18 }}>
-                    <div className="field">
-                      <label htmlFor="nama">Nama lengkap</label>
-                      <input
-                        id="nama"
-                        className={`input ${show("nama") ? "invalid" : ""}`}
-                        value={form.nama}
-                        onChange={set("nama")}
-                        onBlur={blur("nama")}
-                        autoComplete="name"
-                      />
-                      {show("nama") && (
-                        <span className="error-text">{errors.nama}</span>
-                      )}
-                    </div>
-                    <div className="field">
-                      <label htmlFor="email">Surel</label>
-                      <input
-                        id="email"
-                        type="email"
-                        className={`input ${show("email") ? "invalid" : ""}`}
-                        value={form.email}
-                        onChange={set("email")}
-                        onBlur={blur("email")}
-                        autoComplete="email"
-                      />
-                      {show("email") && (
-                        <span className="error-text">{errors.email}</span>
-                      )}
-                    </div>
-                    <div className="field">
-                      <label htmlFor="wa">Nomor WhatsApp</label>
-                      <input
-                        id="wa"
-                        type="tel"
-                        className={`input ${show("whatsapp") ? "invalid" : ""}`}
-                        value={form.whatsapp}
-                        onChange={set("whatsapp")}
-                        onBlur={blur("whatsapp")}
-                        autoComplete="tel"
-                      />
-                      {show("whatsapp") && (
-                        <span className="error-text">{errors.whatsapp}</span>
-                      )}
-                    </div>
-                    <div className="field">
-                      <label htmlFor="inst">Institusi</label>
-                      <input
-                        id="inst"
-                        className="input"
-                        value={form.institusi}
-                        onChange={set("institusi")}
-                        placeholder="Nama kampus atau instansi"
-                      />
-                    </div>
+            <form onSubmit={submitData} noValidate>
+              <div className="card card-pad">
+                <h2>Data peserta</h2>
+                <div className="form-grid" style={{ marginTop: 18 }}>
+                  <div className="field">
+                    <label htmlFor="nama">Nama lengkap</label>
+                    <input
+                      id="nama"
+                      className={`input ${show("nama") ? "invalid" : ""}`}
+                      value={form.nama}
+                      onChange={set("nama")}
+                      onBlur={blur("nama")}
+                      autoComplete="name"
+                    />
+                    {show("nama") && (
+                      <span className="error-text">{errors.nama}</span>
+                    )}
                   </div>
-                </div>
-
-                <label className="check" style={{ margin: "20px 0" }}>
-                  <input
-                    type="checkbox"
-                    checked={agree}
-                    onChange={(e) => setAgree(e.target.checked)}
-                  />
-                  <span>
-                    Data yang saya isi sudah benar dan saya menyetujui Syarat
-                    &amp; ketentuan.
-                  </span>
-                </label>
-
-                <div className="wizard-actions" style={{ marginTop: 0 }}>
-                  <Link
-                    to={`/events/${event.id}`}
-                    className="btn btn-outline btn-lg"
-                  >
-                    Kembali
-                  </Link>
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-lg"
-                    disabled={!agree || saving}
-                  >
-                    Daftar gratis
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div>
-                <div className="card card-pad">
-                  <h2>Pembayaran</h2>
-                  <p
-                    className="muted"
-                    style={{ margin: "6px 0 16px", fontSize: 13 }}
-                  >
-                    Pilih metode pembayaran. Tiket terbit setelah pembayaran
-                    berhasil.
-                  </p>
-                  <div className="stack" style={{ gap: 10 }}>
-                    {PAY_METHODS.map(([key, name, hint]) => (
-                      <label key={key} className="pay-opt">
-                        <input
-                          type="radio"
-                          name="method"
-                          checked={method === key}
-                          onChange={() => setMethod(key)}
-                        />
-                        <span>
-                          {name}
-                          <small>{hint}</small>
-                        </span>
-                      </label>
-                    ))}
+                  <div className="field">
+                    <label htmlFor="email">Surel</label>
+                    <input
+                      id="email"
+                      type="email"
+                      className={`input ${show("email") ? "invalid" : ""}`}
+                      value={form.email}
+                      onChange={set("email")}
+                      onBlur={blur("email")}
+                      autoComplete="email"
+                    />
+                    {show("email") && (
+                      <span className="error-text">{errors.email}</span>
+                    )}
                   </div>
-                </div>
-                <div className="wizard-actions">
-                  <button
-                    type="button"
-                    className="btn btn-outline btn-lg"
-                    onClick={() => setStep("data")}
-                  >
-                    Kembali
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-lg"
-                    disabled={saving}
-                    onClick={finish}
-                  >
-                    Memproses…
-                  </button>
+                  <div className="field">
+                    <label htmlFor="wa">Nomor WhatsApp</label>
+                    <input
+                      id="wa"
+                      type="tel"
+                      className={`input ${show("whatsapp") ? "invalid" : ""}`}
+                      value={form.whatsapp}
+                      onChange={set("whatsapp")}
+                      onBlur={blur("whatsapp")}
+                      autoComplete="tel"
+                    />
+                    {show("whatsapp") && (
+                      <span className="error-text">{errors.whatsapp}</span>
+                    )}
+                  </div>
+                  <div className="field">
+                    <label htmlFor="inst">Institusi</label>
+                    <input
+                      id="inst"
+                      className="input"
+                      value={form.institusi}
+                      onChange={set("institusi")}
+                      placeholder="Nama kampus atau instansi"
+                    />
+                  </div>
                 </div>
               </div>
-            )}
+
+              <label className="check" style={{ margin: "20px 0" }}>
+                <input
+                  type="checkbox"
+                  checked={agree}
+                  onChange={(e) => setAgree(e.target.checked)}
+                />
+                <span>
+                  Data yang saya isi sudah benar dan saya menyetujui Syarat
+                  &amp; ketentuan.
+                </span>
+              </label>
+
+              <div className="wizard-actions" style={{ marginTop: 0 }}>
+                <Link
+                  to={`/events/${event.id}`}
+                  className="btn btn-outline btn-lg"
+                >
+                  Kembali
+                </Link>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-lg"
+                  disabled={!agree || saving}
+                >
+                  Daftar
+                </button>
+              </div>
+            </form>
           </div>
 
           <aside className="card summary" aria-label="Ringkasan pesanan">

@@ -34,7 +34,7 @@ export default function AccountHistoryPage() {
   async function pay(orderNo) {
     await payRegistration(orderNo);
     await queryClient.invalidateQueries({ queryKey: ["registrations"] });
-    toast("Pembayaran berhasil. Tiket Anda sudah terbit.");
+    toast("Pendaftaran berhasil. Tiket Anda sudah terbit.");
   }
 
   return (
@@ -106,7 +106,7 @@ export default function AccountHistoryPage() {
                           className="btn btn-outline btn-sm"
                           onClick={() => pay(r.orderNo)}
                         >
-                          Bayar
+                          Update
                         </button>
                       )}
                       {(r.status === "dipakai" ||
