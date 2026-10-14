@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { SiteFooter } from '../layouts/RootLayout'
+import { SiteFooter } from '../Layouts/RootLayout'
 import Logo from '../components/Logo'
 
 export default function NotFoundPage() {
