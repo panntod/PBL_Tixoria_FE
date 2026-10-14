@@ -1,32 +1,35 @@
-import { Link } from 'react-router-dom'
-import EventCover from './EventCover'
-import { EventStatusBadge } from './StatusBadge'
-import { formatDate, priceLabel } from '../lib/format'
-import { minPrice, totalSeats } from '../lib/services'
+import { Link } from "react-router-dom";
+import EventCover from "./EventCover";
+import { EventStatusBadge } from "./StatusBadge";
+import { formatDate } from "../lib/format";
+import { totalSeats } from "../lib/services";
 
 function footNote(event) {
   switch (event.status) {
-    case 'habis':
-      return 'Kuota terpenuhi'
-    case 'selesai':
-      return 'Acara telah berakhir'
-    case 'dibatalkan':
-      return 'Dibatalkan penyelenggara'
+    case "habis":
+      return "Kuota terpenuhi";
+    case "selesai":
+      return "Acara telah berakhir";
+    case "dibatalkan":
+      return "Dibatalkan penyelenggara";
     default:
-      return `Tersisa ${totalSeats(event)} kursi`
+      return `Tersisa ${totalSeats(event)} kursi`;
   }
 }
 
 export default function EventCard({ event }) {
-  const price = minPrice(event)
-  const dateLine = event.date ? formatDate(event.date) : event.dateLabel
+  const dateLine = event.date ? formatDate(event.date) : event.dateLabel;
   const rangeLine = event.dateEnd
-    ? `${new Date(event.date).getDate()}–${formatDate(event.dateEnd).replace(/^\w+, /, '')}`
-    : dateLine
+    ? `${new Date(event.date).getDate()}–${formatDate(event.dateEnd).replace(/^\w+, /, "")}`
+    : dateLine;
 
   return (
     <Link to={`/events/${event.id}`} className="event-card">
-      <EventCover theme={event.theme} eyebrow={event.category?.nama} title={event.coverLabel} />
+      <EventCover
+        theme={event.theme}
+        eyebrow={event.category?.nama}
+        title={event.coverLabel}
+      />
       <div className="event-card-body">
         <div>
           <EventStatusBadge status={event.status} />
@@ -36,10 +39,9 @@ export default function EventCard({ event }) {
           {rangeLine} · {event.location}
         </p>
         <div className="event-card-foot">
-          <span className={`price ${price === 0 ? 'free' : ''}`}>{priceLabel(price)}</span>
           <span>{footNote(event)}</span>
         </div>
       </div>
     </Link>
-  )
+  );
 }

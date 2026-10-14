@@ -1,18 +1,23 @@
-import { Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { Check } from 'lucide-react'
-import { BlockSkeleton, ErrorState } from '../components/States'
-import { useAuth } from '../context/AuthContext'
-import { formatDate, rupiah } from '../lib/format'
-import { getRegistration } from '../lib/services'
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { Check } from "lucide-react";
+import { BlockSkeleton, ErrorState } from "../components/States";
+import { useAuth } from "../context/AuthContext";
+import { formatDate } from "../lib/format";
+import { getRegistration } from "../lib/services";
 
 export default function ConfirmationPage() {
-  const { orderNo } = useParams()
-  const { user } = useAuth()
-  const { data: reg, isLoading, isError, refetch } = useQuery({
-    queryKey: ['registration', orderNo],
+  const { orderNo } = useParams();
+  const { user } = useAuth();
+  const {
+    data: reg,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["registration", orderNo],
     queryFn: () => getRegistration(orderNo),
-  })
+  });
 
   if (isLoading) {
     return (
@@ -21,20 +26,24 @@ export default function ConfirmationPage() {
           <BlockSkeleton height={420} />
         </div>
       </div>
-    )
+    );
   }
   if (isError || !reg) {
     return (
       <div className="page">
         <div className="container container-md">
-          <ErrorState title="Pendaftaran tidak ditemukan" text="Periksa kembali nomor pesanan Anda." onRetry={refetch} />
+          <ErrorState
+            title="Pendaftaran tidak ditemukan"
+            text="Periksa kembali nomor pesanan Anda."
+            onRetry={refetch}
+          />
         </div>
       </div>
-    )
+    );
   }
 
-  const email = reg.participant?.email || user?.email
-  const ev = reg.event
+  const email = reg.participant?.email || user?.email;
+  const ev = reg.event;
 
   return (
     <div className="page" style={{ paddingTop: 48 }}>
@@ -55,10 +64,6 @@ export default function ConfirmationPage() {
               <div className="k">No. pesanan</div>
               <div className="v">{reg.orderNo}</div>
             </div>
-            <div>
-              <div className="k">Total dibayar</div>
-              <div className="v">{reg.total === 0 ? 'Gratis' : rupiah(reg.total)}</div>
-            </div>
             <div className="full">
               <div className="k">Acara</div>
               <div className="v">
@@ -68,12 +73,13 @@ export default function ConfirmationPage() {
             <div className="full">
               <div className="k">Waktu dan tempat</div>
               <div className="v">
-                {ev && `${formatDate(ev.date)} · ${ev.time?.split('–')[0]} WIB · ${ev.location}`}
+                {ev &&
+                  `${formatDate(ev.date)} · ${ev.time?.split("–")[0]} WIB · ${ev.location}`}
               </div>
             </div>
           </div>
 
-          <div className="alert alert-info" style={{ textAlign: 'left' }}>
+          <div className="alert alert-info" style={{ textAlign: "left" }}>
             Tunjukkan kode QR pada tiket saat registrasi ulang di lokasi.
           </div>
 
@@ -88,5 +94,5 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

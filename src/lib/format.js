@@ -36,16 +36,6 @@ export function formatDateLong(iso) {
   return `${weekday} · ${p.day} ${p.month} ${p.year}`.toUpperCase()
 }
 
-/** 75000 -> "Rp75.000" */
-export function rupiah(n) {
-  const value = Number(n) || 0
-  return `Rp${value.toLocaleString('id-ID')}`
-}
-
-export function priceLabel(n) {
-  return Number(n) === 0 ? 'Gratis' : rupiah(n)
-}
-
 export function initials(name = '') {
   const letters = name
     .trim()
