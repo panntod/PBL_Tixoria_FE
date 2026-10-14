@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import RootLayout, { AuthLayout } from "../layouts/RootLayout";
 import RequireAuth from "../components/RequireAuth";
+
+import RootLayout, { AuthLayout } from "../Layouts/RootLayout";
 import NotFoundPage from "../Pages/NotFoundPage";
 import LandingPage from "../Pages/LandingPage";
 import EventDetailPage from "../Pages/EventDetailPage";
